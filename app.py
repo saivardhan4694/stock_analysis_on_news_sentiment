@@ -3,7 +3,6 @@ from model_trainer import ModelTrainer
 from data_processing import ProcessData
 import pandas as pd
 from datetime import datetime
-from datetime import date
 from prophet.plot import plot_plotly, plot_components_plotly
 import plotly.express as px
 import plotly.graph_objects as go
@@ -18,7 +17,7 @@ from finvizfinance.quote import finvizfinance
 def fetch_stock_data(ticker, period, interval):
     end_date = datetime.now()
     if period == '1wk':
-        start_date = end_date - timedelta(days=7)
+        start_date = end_date - datetime.timedelta(days=7)
         data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
     else:
         data = yf.download(ticker, period=period, interval=interval)
