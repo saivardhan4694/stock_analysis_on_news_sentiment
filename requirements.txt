@@ -18,7 +18,7 @@ plotly==5.24.0
 
 # Financial Data Libraries
 yfinance==0.2.40
-finvizfinance==1.1.0
+newsapi
 
 # Time Series and Forecasting
 statsmodels==0.14.1
