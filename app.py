@@ -14,13 +14,14 @@ from finvizfinance.quote import finvizfinance
 # Function to fetch stock data
 # ----------------------------
 @st.cache_data
-def fetch_stock_data(ticker, start_date, end_date):
-    """
-    Fetch stock data for the given ticker from Yahoo Finance.
-    """
-    stock_data = yf.download(ticker, start=start_date, end=end_date)
-    stock_data.reset_index(inplace=True)
-    return stock_data
+def fetch_stock_data(ticker, period, interval):
+    end_date = datetime.now()
+    if period == '1wk':
+        start_date = end_date - timedelta(days=7)
+        data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
+    else:
+        data = yf.download(ticker, period=period, interval=interval)
+    return data
 
 # -----------------------------------
 # Function to fetch real-time prices
@@ -87,11 +88,17 @@ forecast_days = st.sidebar.number_input(
 # ---------------------------
 st.sidebar.title("Interactive Stock Data Explorer")
 
-# Predefined stocks to show real-time prices
-predefined_tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA']
-st.sidebar.subheader("Real-time Stock Prices")
-realtime_prices = fetch_realtime_prices(predefined_tickers)
-st.sidebar.dataframe(realtime_prices)
+# Sidebar section for real-time stock prices of selected symbols
+st.sidebar.header('Real-Time Stock Prices')
+stock_symbols = ['AAPL', 'GOOGL', 'AMZN', 'MSFT']
+for symbol in stock_symbols:
+    real_time_data = fetch_stock_data(symbol, '1d', '1m')
+    if not real_time_data.empty:
+        real_time_data = process_data(real_time_data)
+        last_price = real_time_data['Close'].iloc[-1]
+        change = last_price - real_time_data['Open'].iloc[0]
+        pct_change = (change / real_time_data['Open'].iloc[0]) * 100
+        st.sidebar.metric(f"{symbol}", f"{last_price:.2f} USD", f"{change:.2f} ({pct_change:.2f}%)")
 
 
 # Create Tabs
