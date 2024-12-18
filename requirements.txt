@@ -1,6 +1,6 @@
 # TensorFlow and Keras
-tensorflow==2.15.0
-keras==2.15.0
+tensorflow==2.16.1
+keras==2.16.1
 
 # Transformers Library
 transformers==4.37.2
@@ -30,4 +30,3 @@ streamlit==1.31.0
 
 # Utility Libraries
 pillow==10.3.0
-
