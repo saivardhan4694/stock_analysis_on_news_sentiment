@@ -15,7 +15,7 @@ from finvizfinance.quote import finvizfinance
 # ----------------------------
 @st.cache_data
 def fetch_stock_data(ticker, period, interval):
-    end_date = datetime.now()
+    end_date = datetime.datetime.now()
     if period == '1wk':
         start_date = end_date - datetime.timedelta(days=7)
         data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
