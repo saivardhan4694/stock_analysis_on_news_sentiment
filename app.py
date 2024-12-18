@@ -9,10 +9,9 @@ import plotly.graph_objects as go
 import yfinance as yf
 from finvizfinance.quote import finvizfinance
 
-
-# ----------------------------
-# Function to fetch stock data
-# ----------------------------
+# -----------------------------------
+# Function to fetch real-time prices
+# -----------------------------------
 @st.cache_data
 def fetch_stock_data(ticker, period, interval):
     end_date = datetime.datetime.now()
@@ -23,21 +22,26 @@ def fetch_stock_data(ticker, period, interval):
         data = yf.download(ticker, period=period, interval=interval)
     return data
 
-# -----------------------------------
-# Function to fetch real-time prices
-# -----------------------------------
-def fetch_realtime_prices(tickers):
+@st.cache_data
+def process_data(data):
+    if data.index.tzinfo is None:
+        data.index = data.index.tz_localize('UTC')
+    data.index = data.index.tz_convert('US/Eastern')
+    data.reset_index(inplace=True)
+    data.rename(columns={'Date': 'Datetime'}, inplace=True)
+    return data
+    
+# ----------------------------
+# Function to fetch stock data
+# ----------------------------
+@st.cache_data
+def fetch_stock_data(ticker, start_date, end_date):
     """
-    Fetch real-time prices for a list of tickers.
+    Fetch stock data for the given ticker from Yahoo Finance.
     """
-    data = {}
-    for ticker in tickers:
-        stock = yf.Ticker(ticker)
-        data[ticker] = {
-            'Current Price': stock.history(period='1d')['Close'].iloc[-1],
-            'Previous Close': stock.history(period='2d')['Close'].iloc[0],
-        }
-    return pd.DataFrame(data).T
+    stock_data = yf.download(ticker, start=start_date, end=end_date)
+    stock_data.reset_index(inplace=True)
+    return stock_data
 
 # ---------------------------
 # Function to fetch news data
