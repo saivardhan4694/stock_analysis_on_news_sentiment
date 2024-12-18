@@ -23,6 +23,7 @@ newsapi
 # Time Series and Forecasting
 statsmodels==0.14.1
 prophet==1.1.5
+statsmodels
 holidays
 
 # Streamlit for App Development
