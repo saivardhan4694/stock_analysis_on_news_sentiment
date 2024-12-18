@@ -2,7 +2,7 @@ import streamlit as st
 from model_trainer import ModelTrainer
 from data_processing import ProcessData
 import pandas as pd
-from datetime 
+import datetime 
 from prophet.plot import plot_plotly, plot_components_plotly
 import plotly.express as px
 import plotly.graph_objects as go
