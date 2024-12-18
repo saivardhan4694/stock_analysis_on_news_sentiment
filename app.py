@@ -58,7 +58,7 @@ st.sidebar.title("Predicting Stock Prices by News Sentiment")
 ticker = st.sidebar.text_input("Enter stock ticker (e.g., AAPL):", value='AAPL')
 
 # Current date
-today = date.today()
+today = datetime.date.today()
 
 # Enforce that the start date is no earlier than one month ago
 min_start_date = today - datetime.timedelta(days=30)
